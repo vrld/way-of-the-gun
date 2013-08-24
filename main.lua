@@ -76,8 +76,8 @@ function love.load()
 
 	-- TEST
 	--GS.switch(State.menu)
-	GS.switch(State.intro)
-	--GS.switch(State.shootout)
+	--GS.switch(State.intro)
+	GS.switch(State.shootout)
 	--GS.switch(State.won_duel)
 	--GS.switch(State.lost_duel)
 end

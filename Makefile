@@ -8,7 +8,7 @@ osxapp=~/Stuff/love.0.8.app
 
 game=way-of-the-gun.love
 sources=$(wildcard *.lua **/*.lua)
-res=$(wildcard fonts/*.ttf gfx/*.png sound/*.ogg) #adjust accordingly
+res=$(wildcard fonts/*.ttf img/*.png snd/*.ogg) #adjust accordingly
 
 # change this for out of tree builds. directories must exist
 builddir=.
@@ -16,7 +16,7 @@ distdir=.
 
 .PHONY : run test love clean win
 
-run : test imgs
+run : test imgs snd
 	$(love) .
 
 test : $(sources) $(res)
@@ -25,9 +25,12 @@ test : $(sources) $(res)
 imgs: $(wildcard ~/shared/D/ldf7/*.png)
 	cp ~/shared/D/ldf7/*.png ~/way-of-the-gun/img/
 
+snd: $(wildcard ~/shared/D/ldf7/*.ogg)
+	cp ~/shared/D/ldf7/*.ogg ~/way-of-the-gun/snd/
+
 dist : love win osx
 
-love : $(builddir)/$(game).love
+love : $(builddir)/$(game).love imgs snd
 	cp $(builddir)/(game).love $(distdir)/$(game).love
 
 osx : $(builddir)/$(game).app

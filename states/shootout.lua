@@ -22,7 +22,16 @@ end
 
 function st:enter(other, prob_sabotage)
 	prob_sabotage = prob_sabotage or 0
-	-- Sound.stream.menu:play()
+
+	Sound.stream.shadows:play()
+	Sound.stream.shadows:setVolume(0)
+	local vol = 0
+	-- TODO: libify fade in/fade out
+	self.sound_timer = Timer.do_for(1, function(dt)
+		vol = vol + dt
+		Sound.stream.shadows:setVolume(.6 * vol)
+	end)
+
 	self.tint = {100,100,100}
 	self.tween = Timer.tween(20, self.tint, {210,200,200}, 'linear')
 
@@ -65,23 +74,34 @@ function st:enter(other, prob_sabotage)
 	self.signals:register('other-shot-me', function()
 		self.is_shot = true
 		self.anims.shoot_left:pauseAtStart()
-		self.flash = {160,82,81, time = .1}
+		self.flash = {160,82,81, time = .17}
 		Timer.add(.5, function() GS.transition(State.lost_duel, 1) end)
+		Sound.static.gunshot:play()
 	end)
 
 	self.other_shot = false
 	self.signals:register('i-shot-other', function()
 		self.other_shot = true
 		self.anims.shoot_right:pauseAtStart()
-		self.flash = {230, 189, 120, time = .1}
+		self.flash = {230, 189, 120, time = .17}
 		Timer.add(.5, function() GS.transition(State.won_duel, 1) end)
+		Sound.static.gunshot:play()
 	end)
 
-	self.signals:emit('stand-still')
+	Timer.add(3, function()
+		self.signals:emit('stand-still')
+	end)
 end
 
 function st:leave()
-	-- Sound.stream.menu:stop()
+	local t = 1
+	Timer.cancel(self.sound_timer)
+	Timer.do_for(.5, function(dt)
+		t = t - 2 * dt
+		Sound.stream.shadows:setVolume(.6 * t)
+	end, function()
+		Sound.stream.shadows:stop()
+	end)
 	Timer.cancel(self.tween)
 end
 
@@ -100,7 +120,7 @@ function st:update(dt)
 end
 
 function st:draw()
-	if self.flash then
+	if self.flash and self.flash.time < .1 then
 		love.graphics.setColor(self.flash)
 		love.graphics.rectangle('fill', 0,0, WIDTH, HEIGHT)
 	else

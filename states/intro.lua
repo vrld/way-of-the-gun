@@ -12,30 +12,44 @@ This cannot go on, brother.
 
 You know there is only one way, brother, only one way to restore your honor.
 
-Aim is not your strengh, we both know that.
+Aim is not your strengh, brother, we both know that.
 
-But you are smart, brother, and you have other ... resources.
+But you are smart and you have other ... resources.
 
-Do whatever you need to do.
+Do whatever you need to.
 
 Just don't die, brother.]]
 
 function st:enter()
-	-- Sound.stream.intro:play()
+	Sound.stream.voices_of_the_dead:play()
+	Sound.stream.voices_of_the_dead:setVolume(0)
 	self.intro = {scale=4, textpos=HEIGHT, bars = 300, dontdie = 0}
 	self.timer = Timer.new()
-	self.timer:tween(43, self.intro, {scale = .3}, 'out-circ')
-	self.timer:tween(43, self.intro, {bars = 0}, 'out-quad')
-	self.timer:tween(40, self.intro, {textpos = -880}, 'linear')
-	self.timer:add(37, function()
+	self.timer:tween(53, self.intro, {scale = .3}, 'out-circ')
+	self.timer:tween(53, self.intro, {bars = 0}, 'out-quad')
+	self.timer:tween(50, self.intro, {textpos = -880}, 'linear')
+	self.timer:add(47, function()
 		self.timer:tween(3, self.intro, {dontdie = 255}, 'expo')
 	end)
 
-	self.timer:add(45, function() GS.transition(State.bribing, 1) end)
+	self.timer:add(55, function() GS.transition(State.bribing, 1) end)
+
+	local t = 0
+	self.sound_timer = Timer.do_for(1, function(dt)
+		t = t + dt
+		Sound.stream.voices_of_the_dead:setVolume(.6 * t)
+	end)
 end
 
 function st:leave()
-	-- Sound.stream.intro:stop()
+	local t = 1
+	Timer.cancel(self.sound_timer)
+	Timer.do_for(.5, function(dt)
+		t = t - 2 * dt
+		Sound.stream.voices_of_the_dead:setVolume(.6 * t)
+	end, function()
+		Sound.stream.voices_of_the_dead:stop()
+	end)
 end
 
 function st:update(dt)
