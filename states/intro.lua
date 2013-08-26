@@ -4,21 +4,22 @@ function st:init()
 	Images.intro_shape:setFilter('linear', 'linear')
 end
 
-local introtext = [[They laugh at you, brother.
+local introtext = [[They laugh at me.
 
-They laugh at you, and they laugh at us, brother.
+They laugh at me, and they laugh at you, brother.
 
 This cannot go on, brother.
 
-You know there is only one way, brother, only one way to restore your honor.
+You know there is only one way, brother, only one way to restore my honour.
 
-Aim is not your strengh, brother, we both know that.
+Aim is not my strengh, brother, we both know that.
 
 But you are smart and you have other ... resources.
 
-Do whatever you need to.
+Be my second, brother, and
+do whatever you need to.
 
-Just don't die, brother.]]
+Just don't let me die, brother.]]
 
 function st:enter()
 	Sound.stream.voices_of_the_dead:play()
@@ -76,7 +77,7 @@ function st:draw()
 
 	love.graphics.setColor(226,184,104, self.intro.dontdie)
 	love.graphics.setFont(Font.slkscr[50])
-	love.graphics.printf('Just. dont. die.', 0, HEIGHT/2-Font.slkscr[50]:getHeight(), WIDTH-2, 'center')
+	love.graphics.printf('Just. dont. let. me. die.', 0, HEIGHT/2-Font.slkscr[50]:getHeight(), WIDTH-2, 'center')
 
 	love.graphics.setColor(226,184,104,100)
 	love.graphics.setFont(Font.slkscr[20])

@@ -6,7 +6,9 @@ end
 
 function st:enter()
 	-- Sound.stream.menu:play()
+	-- XXX: state persistent settings
 	foes_remaining = 10
+	money_available = 1000
 end
 
 function st:leave()
@@ -29,20 +31,23 @@ function st:draw()
 	love.graphics.printf('WAY OF THE', 0, HEIGHT/2-h*1.2, WIDTH, 'center')
 
 	love.graphics.setFont(Font.slkscr[28])
-	love.graphics.printf('Press [SPACE] to begin', 0, HEIGHT-40, WIDTH, 'center')
+	love.graphics.printf('Press [SPACE] to begin', 0, HEIGHT-80, WIDTH, 'center')
 
-	--love.graphics.setColor(72,53,89)
-	--love.graphics.setFont(Font.slkscr[18])
-	--love.graphics.printf('vrld presets', 2, 2, WIDTH, 'left')
-
-	--love.graphics.setColor(72,53,89)
-	--love.graphics.printf('font by Jason Kotte', 0, 2, WIDTH-2, 'right')
+	--love.graphics.print(('mouse: %d, %d'):format(love.mouse.getPosition()), 2,2)
 end
 
 function st:keypressed(key)
 	if key == ' ' or key == 'return' then
-		GS.switch(State.shootout)
-		-- TODO: GS.transition(State.story)
+		--GS.switch(State.shootout)
+		GS.transition(State.intro)
+	end
+end
+
+function st:mousereleased(x,y,btn)
+	if x > 139 and x < 197 and y > 360 and y < 450 then --  'easter egg'
+		GS.transition(State.credits)
+	elseif btn == 'l' then
+		st:keypressed(' ')
 	end
 end
 

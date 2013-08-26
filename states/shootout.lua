@@ -61,12 +61,17 @@ function st:enter(other, prob_sabotage)
 		end)
 	end)
 
+	self.may_shoot = false
 	self.signals:register('shoot', function()
 		self.phase = 'shoot'
 		self.anims.shoot_left:pauseAtStart()
 		self.anims.shoot_right:pauseAtStart()
+		Timer.add(.5, function() self.may_shoot = true end)
+		-- TODO: arten der sabotage?
 		if math.random() > prob_sabotage then
 			self.anims.shoot_right:resume()
+		else
+			Sound.static.dudshot:play()
 		end
 	end)
 
@@ -133,7 +138,7 @@ function st:draw()
 		self.anims.shoot_left:draw(Images.shoot_anim, 400-self.dist,473+self.dist/28, 0,-4,4, 12,40)
 		self.anims.shoot_right:draw(Images.shoot_anim, 400+self.dist,473-self.dist/28, 0,4,4, 12,40)
 
-		if foes_remaining == 10 then
+		if self.may_shoot then
 			love.graphics.setColor(226,184,104)
 			love.graphics.setFont(Font.slkscr[25])
 			love.graphics.printf('SHOOT', 0, HEIGHT - 50, WIDTH, 'center')
@@ -146,7 +151,7 @@ function st:draw()
 end
 
 function st:keypressed(key)
-	if self.phase == 'shoot' and not (self.is_shot or self.other_shot) then
+	if self.phase == 'shoot' and self.may_shoot and  not (self.is_shot or self.other_shot) then
 		self.anims.shoot_left:resume()
 	end
 end

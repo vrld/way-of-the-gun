@@ -8,10 +8,18 @@ function st:enter()
 	-- Sound.stream.menu:play()
 	self.fade = {12,11,14,255}
 	Timer.tween(1, self.fade, {[4] = 0}, 'sine')
+	self.switcher = Timer.add(30, function() st:keypressed(' ') end)
+
+	self.color_space = {226,184,104,0}
+	self.fade_space = Timer.add(3, function()
+		Timer.tween(1, self.color_space, {[4] = 200}, 'sine')
+	end)
 end
 
 function st:leave()
 	-- Sound.stream.menu:stop()
+	Timer.cancel(self.switcher)
+	Timer.cancel(self.fade_space)
 end
 
 function st:draw()
@@ -26,10 +34,14 @@ function st:draw()
 	love.graphics.setFont(Font.slkscr[32])
 	love.graphics.printf('YOU FELL VICTIM TO THE', 0, HEIGHT/2-h*2.2, WIDTH, 'center')
 	love.graphics.setFont(Font.slkscr[26])
-	love.graphics.printf('you may have better luck in the next life', 0, HEIGHT-40, WIDTH, 'center')
+	love.graphics.printf('better luck in your next life', 0, HEIGHT-80, WIDTH, 'center')
 
 	love.graphics.setFont(Font.slkscr[62])
 	love.graphics.printf('WAY OF THE', 0, HEIGHT/2-h*1.2, WIDTH, 'center')
+
+	love.graphics.setColor(self.color_space)
+	love.graphics.setFont(Font.slkscr[22])
+	love.graphics.printf('press [space] to continue', 0, HEIGHT-40, WIDTH, 'center')
 
 	love.graphics.setColor(self.fade)
 	love.graphics.rectangle('fill', 0, 0, WIDTH, HEIGHT)
@@ -39,6 +51,10 @@ function st:keypressed(key)
 	if key == ' ' or key == 'return' then
 		GS.transition(State.menu, .5)
 	end
+end
+
+function st:mousereleased(x,y,btn)
+	if btn == 'l' then self:keypressed(' ') end
 end
 
 return st

@@ -72,14 +72,16 @@ function love.load()
 
 	GS.registerEvents()
 	-- RELEASE
-	--GS.switch(State.splash)
+	GS.switch(State.splash)
 
 	-- TEST
 	--GS.switch(State.menu)
 	--GS.switch(State.intro)
-	GS.switch(State.shootout)
+	--GS.switch(State.shootout)
 	--GS.switch(State.won_duel)
 	--GS.switch(State.lost_duel)
+	--GS.switch(State.bribing)
+	--GS.switch(State.credits)
 end
 
 function love.update(dt)
@@ -87,7 +89,13 @@ function love.update(dt)
 end
 
 function love.keypressed(key)
-	if (key == 'escape' or key == 'p') and GS.current() ~= State.menu and GS.current() ~= State.pause then
+	if (key == 'escape' or key == 'p') and GS.current() ~= State.pause then
 		GS.push(State.pause)
+	end
+end
+
+function love.mousepressed()
+	if GS.current() ~= State.bribing then
+		GS.keypressed('mouse', 0)
 	end
 end
