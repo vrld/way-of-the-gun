@@ -822,6 +822,7 @@ Mother?
 
 You seize the moment and damage the firing mechanism of the gun.]]
 					check_for_money(10)
+					self.prob_sabotage = 1
 				end},
 				{text = 'high-end prostitutes for 1000', effect = function(opts, i)
 					self.fulltext = [[You hire a high-end prostitute to distract Yeoman while you manipulate the gun.
